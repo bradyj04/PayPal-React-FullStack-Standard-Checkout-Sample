@@ -59,7 +59,12 @@ const createOrder = async (cart) => {
       {
         amount: {
           currency_code: "USD",
-          value: "100.00",
+          //value: {amount},
+          value: "77.44",
+          custom_id: "company name",
+          //customer_id: {customer_id},
+          invoice_id: "invoice no",
+          //invoice_id: {invoice_no},
         },
       },
     ],

@@ -8,20 +8,36 @@ function Message({ content }) {
 
 function App() {
   const initialOptions = {
-    "client-id": "YOUR_PAYPAL_CLIENT_ID",
-    "enable-funding": "paylater,venmo",
+    "client-id": "AePU6KG576DvTcUIhavLewI-4meO8Fd5JHqnpDWvkOftbJ9JbJ1w3cUG_n14yQLR23MBbYMTNtc3xjPy",
+    "enable-funding": "",
     "data-sdk-integration-source": "integrationbuilder_sc",
   };
 
   const [message, setMessage] = useState("");
+  const [amount, setAmount] = useState('10.00'); // Default amount
+
+
+  
 
   return (
     <div className="App">
+
+    <div>
+      <img src="http://www.microdome.net/new/wp-content/uploads/2015/10/cropped-caselogo2.png" alt="Microdome logo" />
+    </div>
+
+    <input
+      type="number"
+      value={amount}
+      onChange={setAmount}
+    />
+
+
       <PayPalScriptProvider options={initialOptions}>
         <PayPalButtons
           style={{
             shape: "rect",
-            //color:'blue' change the default color of the buttons
+            color:'blue', //change the default color of the buttons
             layout: "vertical", //default value. Can be changed to horizontal
           }}
           createOrder={async () => {
@@ -36,8 +52,8 @@ function App() {
                 body: JSON.stringify({
                   cart: [
                     {
-                      id: "YOUR_PRODUCT_ID",
-                      quantity: "YOUR_PRODUCT_QUANTITY",
+                      id: "ONLINE_PAYMENT",
+                      quantity: "1",
                     },
                   ],
                 }),
