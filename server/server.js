@@ -3,6 +3,8 @@ import fetch from "node-fetch";
 import "dotenv/config";
 import path from "path";
 
+import amount from "./App";
+
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 const app = express();
@@ -59,12 +61,10 @@ const createOrder = async (cart) => {
       {
         amount: {
           currency_code: "USD",
-          //value: {amount},
-          value: "77.44",
-          custom_id: "company name",
-          //customer_id: {customer_id},
-          invoice_id: "invoice no",
-          //invoice_id: {invoice_no},
+          //value: "0",
+          value: {amount}, //get amount from front end variable
+          custom_id: "company name", //optional customer id from front end variable
+          invoice_id: "invoice no", //invoice_id: {invoice_no}, //optional invoice id from front end variable
         },
       },
     ],

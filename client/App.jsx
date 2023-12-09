@@ -1,36 +1,64 @@
 import React, { useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
+export const amount = "";
+
 // Renders errors or successfull transactions on the screen.
 function Message({ content }) {
-  return <p>{content}</p>;
+  return <p className="message">{content}</p>;
 }
 
 function App() {
   const initialOptions = {
     "client-id": "AePU6KG576DvTcUIhavLewI-4meO8Fd5JHqnpDWvkOftbJ9JbJ1w3cUG_n14yQLR23MBbYMTNtc3xjPy",
     "enable-funding": "",
+    "disable-funding": "paylater",
     "data-sdk-integration-source": "integrationbuilder_sc",
   };
 
   const [message, setMessage] = useState("");
-  const [amount, setAmount] = useState('10.00'); // Default amount
+  const [amount, setAmount] = useState(""); // Default payment amount
+  const [customer_id, setNameOrCompany] = useState("");
+  const [invoice_id, setInvoiceNumber] = useState("");
 
+  const handleNameOrCompanyChange = (e) => {
+    setNameOrCompany(e.target.value);
+  };
 
-  
+  const handleInvoiceNumberChange = (e) => {
+    setInvoiceNumber(e.target.value);
+  };
 
   return (
     <div className="App">
 
     <div>
-      <img src="http://www.microdome.net/new/wp-content/uploads/2015/10/cropped-caselogo2.png" alt="Microdome logo" />
+      <img src="http://www.microdome.net/new/wp-content/uploads/2015/10/cropped-caselogo2.png" class="logo" alt="Microdome logo" />
     </div>
 
-    <input
-      type="number"
-      value={amount}
-      onChange={setAmount}
-    />
+    <hr />
+
+    
+
+    <div class="container">
+
+    <p>Enter the <strong>First and Last Name, or Company Name</strong> on your account:</p>
+
+    <input placeholder="Name or Company Name" />
+
+    <p>Enter the <strong>Invoice, Service Order, or Statement Number</strong>. If you do not have a number, please give a brief description to help us locate your account:</p>
+
+    <input placeholder="Invoice Number" />
+
+    <p>Enter the <strong>Dollar Amount</strong> you are paying today:</p>
+      
+    $ <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+       
+    <hr />
+      
+    <p>You may pay with <strong>PayPal or debit/credit card</strong>.</p>
+
+    </div>
 
 
       <PayPalScriptProvider options={initialOptions}>
@@ -111,7 +139,7 @@ function App() {
                 const transaction =
                   orderData.purchase_units[0].payments.captures[0];
                 setMessage(
-                  `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
+                  `Transaction ${transaction.status}: ${transaction.id}.`,
                 );
                 console.log(
                   "Capture result",
