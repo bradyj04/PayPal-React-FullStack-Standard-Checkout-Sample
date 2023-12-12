@@ -42,3 +42,8 @@ body {
   .message:empty { 
     border: none;
 }
+
+  .message.success {
+    border:2px solid green;
+    color:green;
+  }

@@ -15,7 +15,7 @@ function App() {
   };
 
   const [message, setMessage] = useState("");
-  const [amount, setAmount] = useState("10"); 
+  const [amount, setAmount] = useState(""); 
   const [custom_id, setNameOrCompany] = useState("");
   const [invoice_id, setInvoiceNumber] = useState("");
 
@@ -138,14 +138,16 @@ function App() {
                 // Or go to another URL:  actions.redirect('thank_you.html');
                 const transaction =
                   orderData.purchase_units[0].payments.captures[0];
+                  actions.redirect('success.html');
                 setMessage(
-                  `Transaction ${transaction.status}: ${transaction.id}.`,
+                  `Transaction ${transaction.status}: Transction ID: ${transaction.id}.`,
                 );
                 console.log(
                   "Capture result",
                   orderData,
                   JSON.stringify(orderData, null, 2),
                 );
+                
               }
             } catch (error) {
               console.error(error);
