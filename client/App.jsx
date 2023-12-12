@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
-export const amount = "";
 
 // Renders errors or successfull transactions on the screen.
 function Message({ content }) {
@@ -17,38 +15,31 @@ function App() {
   };
 
   const [message, setMessage] = useState("");
-  const [amount, setAmount] = useState(""); // Default payment amount
-  const [customer_id, setNameOrCompany] = useState("");
+  const [amount, setAmount] = useState("10"); 
+  const [custom_id, setNameOrCompany] = useState("");
   const [invoice_id, setInvoiceNumber] = useState("");
 
-  const handleNameOrCompanyChange = (e) => {
-    setNameOrCompany(e.target.value);
-  };
-
-  const handleInvoiceNumberChange = (e) => {
-    setInvoiceNumber(e.target.value);
-  };
 
   return (
     <div className="App">
 
     <div>
-      <img src="http://www.microdome.net/new/wp-content/uploads/2015/10/cropped-caselogo2.png" class="logo" alt="Microdome logo" />
+      <img src="http://www.microdome.net/new/wp-content/uploads/2015/10/cropped-caselogo2.png" className="logo" alt="Microdome logo" />
     </div>
 
     <hr />
 
     
 
-    <div class="container">
+    <div className="container">
 
     <p>Enter the <strong>First and Last Name, or Company Name</strong> on your account:</p>
 
-    <input placeholder="Name or Company Name" />
+    <input placeholder="Name or Company Name" value={custom_id} onChange={(e) => setNameOrCompany(e.target.value)}/>
 
     <p>Enter the <strong>Invoice, Service Order, or Statement Number</strong>. If you do not have a number, please give a brief description to help us locate your account:</p>
 
-    <input placeholder="Invoice Number" />
+    <input placeholder="Invoice Number" value={invoice_id} onChange={(e) => setInvoiceNumber(e.target.value)}/>
 
     <p>Enter the <strong>Dollar Amount</strong> you are paying today:</p>
       
@@ -63,6 +54,7 @@ function App() {
 
       <PayPalScriptProvider options={initialOptions}>
         <PayPalButtons
+          forceReRender={[amount, custom_id, invoice_id]}
           style={{
             shape: "rect",
             color:'blue', //change the default color of the buttons
@@ -70,6 +62,11 @@ function App() {
           }}
           createOrder={async () => {
             try {
+
+              console.log("Amount:", amount);
+              console.log("Custom ID:", custom_id);
+              console.log("Invoice ID:", invoice_id);
+
               const response = await fetch("/api/orders", {
                 method: "POST",
                 headers: {
@@ -80,8 +77,11 @@ function App() {
                 body: JSON.stringify({
                   cart: [
                     {
-                      id: "ONLINE_PAYMENT",
-                      quantity: "1",
+                      //id: "ONLINE_PAYMENT",
+                      //quantity: "1",
+                      value: amount,
+                      custom_id: custom_id,
+                      invoice_id: invoice_id,
                     },
                   ],
                 }),
