@@ -50,7 +50,8 @@ const createOrder = async (cart) => {
     "shopping cart information passed from the frontend createOrder() callback:",
     cart,
   );
-
+  //the cart argument is already a json object, just need to access it
+  
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const payload = {
@@ -61,8 +62,8 @@ const createOrder = async (cart) => {
           currency_code: "USD",
           //value: "10", //this works
           value: cart[0].value,
-          custom_id: cart[0].custom_id, //optional customer name from front end variable
-          invoice_id: cart[0].invoice_id, //optional invoice id from front end variable
+          //custom_id: cart[0].custom_id, //optional customer name from front end variable
+          //invoice_id: parsedCart[0].invoice_id, //optional invoice id from front end variable
         },
       },
     ],

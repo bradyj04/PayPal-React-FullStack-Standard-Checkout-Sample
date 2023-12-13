@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 // Renders errors or successfull transactions on the screen.
@@ -12,12 +12,23 @@ function App() {
     "enable-funding": "",
     "disable-funding": "paylater",
     "data-sdk-integration-source": "integrationbuilder_sc",
-  };
+  };  
 
   const [message, setMessage] = useState("");
   const [amount, setAmount] = useState(""); 
   const [custom_id, setNameOrCompany] = useState("");
   const [invoice_id, setInvoiceNumber] = useState("");
+
+  const amountRef = useRef(amount);
+  const customIdRef = useRef(custom_id);
+  const invoiceIdRef = useRef(invoice_id);
+
+  // Update refs whenever state changes
+  useEffect(() => {
+    amountRef.current = amount;
+    customIdRef.current = custom_id;
+    invoiceIdRef.current = invoice_id;
+  }, [amount, custom_id, invoice_id]);
 
 
   return (
@@ -54,7 +65,6 @@ function App() {
 
       <PayPalScriptProvider options={initialOptions}>
         <PayPalButtons
-          forceReRender={[amount, custom_id, invoice_id]}
           style={{
             shape: "rect",
             color:'blue', //change the default color of the buttons
@@ -62,10 +72,9 @@ function App() {
           }}
           createOrder={async () => {
             try {
-
-              console.log("Amount:", amount);
-              console.log("Custom ID:", custom_id);
-              console.log("Invoice ID:", invoice_id);
+              console.log("Amount: " + amountRef.current);
+              console.log("Custom ID:", customIdRef.current);
+              console.log("Invoice ID:", invoiceIdRef.current);
 
               const response = await fetch("/api/orders", {
                 method: "POST",
@@ -77,11 +86,11 @@ function App() {
                 body: JSON.stringify({
                   cart: [
                     {
-                      //id: "ONLINE_PAYMENT",
-                      //quantity: "1",
-                      value: amount,
-                      custom_id: custom_id,
-                      invoice_id: invoice_id,
+                      id: "ONLINE_PAYMENT",
+                      quantity: "1",
+                      value: amountRef.current,
+                      custom_id: customIdRef.current,
+                      invoice_id: invoiceIdRef.current,
                     },
                   ],
                 }),
